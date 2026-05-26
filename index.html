@@ -994,6 +994,108 @@ footer {
   .footer-top { grid-template-columns: 1fr; }
   footer { padding: 40px 24px 24px; }
 }
+
+/* ===== MOBILE RESPONSIVE FIX ===== */
+@media (max-width: 768px) {
+
+  header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 18px 20px;
+  }
+
+  header.scrolled {
+    padding: 14px 20px;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  nav a {
+    font-size: 0.7rem;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .hero-left {
+    padding: 150px 24px 80px;
+    text-align: center;
+    align-items: center;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+
+  .hero-desc {
+    max-width: 100%;
+    font-size: 0.85rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .story {
+    padding: 80px 24px;
+    gap: 40px;
+  }
+
+  .story-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .section-header {
+    gap: 20px;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .card-name {
+    font-size: 1.2rem;
+  }
+
+  .contact-form {
+    width: 100%;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .marquee-item {
+    padding: 0 20px;
+    font-size: 0.6rem;
+  }
+}
 </style>
 </head>
 <body>
