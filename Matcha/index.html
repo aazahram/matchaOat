@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matcha Oat — Premium Matcha Experience</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --cream: #f7f4ee;
+  --cream-dark: #ede8dc;
+  --matcha-deep: #1a3d1f;
+  --matcha: #2d5a27;
+  --matcha-mid: #4a7c3f;
+  --matcha-light: #7aab68;
+  --matcha-pale: #c8deb9;
+  --matcha-mist: #e8f0e0;
+  --gold: #b8975a;
+  --gold-light: #d4af72;
+  --ink: #1c1c1a;
+  --fog: #6b6b60;
+  --radius: 2px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ---- NOISE TEXTURE OVERLAY ---- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ---- DARK MODE ---- */
+body.dark {
+  --cream: #0e1410;
+  --cream-dark: #161e13;
+  --matcha-mist: #0d1a0b;
+  --ink: #e8e4d9;
+  --fog: #9a9a8a;
+}
+
+body.dark nav a, body.dark .logo { color: #e8e4d9; }
+body.dark .card { background: #13201010; border-color: rgba(200,222,185,0.15); }
+body.dark .card-inner { background: #0e1a0d; }
+body.dark footer { background: #080e07; color: #6b6b60; }
+
+/* ---- HEADER / NAV ---- */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 60px;
+  transition: background 0.5s, padding 0.4s;
+}
+
+header.scrolled {
+  background: rgba(247, 244, 238, 0.92);
+  backdrop-filter: blur(20px);
+  padding: 16px 60px;
+  border-bottom: 0.5px solid rgba(45,90,39,0.12);
+}
+
+body.dark header.scrolled {
+  background: rgba(10, 16, 9, 0.92);
+}
+
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.logo span { color: var(--matcha); }
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+nav a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  opacity: 0.75;
+  transition: opacity 0.3s;
+  position: relative;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--matcha);
+  transition: width 0.35s cubic-bezier(0.4,0,0,1);
+}
+
+nav a:hover { opacity: 1; }
+nav a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: var(--matcha-deep);
+  color: #fff !important;
+  opacity: 1 !important;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.1em;
+  transition: background 0.3s, transform 0.2s !important;
+}
+
+.nav-cta::after { display: none; }
+.nav-cta:hover { background: var(--matcha) !important; transform: translateY(-1px); }
+
+.toggle-btn {
+  background: none;
+  border: 0.5px solid rgba(45,90,39,0.3);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 8px 16px;
+  border-radius: 20px;
+  letter-spacing: 0.08em;
+  transition: all 0.3s;
+}
+
+.toggle-btn:hover { border-color: var(--matcha); color: var(--matcha); }
+
+/* ---- HERO ---- */
+.hero {
+  height: 100vh;
+  min-height: 700px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 70px 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeSlideUp 0.9s 0.2s ease forwards;
+}
+
+.hero-eyebrow-line {
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.hero-eyebrow span {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.2rem, 5vw, 5rem);
+  font-weight: 300;
+  line-height: 1.08;
+  color: var(--matcha-deep);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeSlideUp 0.9s 0.4s ease forwards;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--matcha);
+}
+
+.hero-desc {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--fog);
+  max-width: 380px;
+  margin-bottom: 50px;
+  opacity: 0;
+  animation: fadeSlideUp 0.9s 0.6s ease forwards;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  opacity: 0;
+  animation: fadeSlideUp 0.9s 0.8s ease forwards;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--matcha-deep);
+  color: #fff;
+  text-decoration: none;
+  padding: 15px 32px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn-primary:hover { background: var(--matcha); transform: translateY(-2px); }
+
+.btn-primary .arrow {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  transition: transform 0.3s;
+}
+
+.btn-primary:hover .arrow { transform: translateX(2px); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--matcha);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: gap 0.3s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.btn-ghost:hover { gap: 14px; }
+
+/* HERO RIGHT - image panel */
+.hero-right {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--matcha-deep) 0%, var(--matcha) 50%, var(--matcha-mid) 100%);
+  z-index: 0;
+}
+
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+  scale: 1;
+  animation: slowZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes slowZoom {
+  from { scale: 1; }
+  to { scale: 1.06; }
+}
+
+.hero-badge {
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  z-index: 3;
+  background: rgba(247,244,238,0.15);
+  backdrop-filter: blur(20px);
+  border: 0.5px solid rgba(255,255,255,0.25);
+  border-radius: 16px;
+  padding: 20px 24px;
+  color: #fff;
+  animation: fadeSlideUp 1s 1s ease forwards;
+  opacity: 0;
+}
+
+.hero-badge-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1;
+  display: block;
+}
+
+.hero-badge-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+/* Decorative circle on hero right */
+.hero-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(255,255,255,0.15);
+  z-index: 1;
+}
+
+.hero-circle::before, .hero-circle::after {
+  content: '';
+  position: absolute;
+  inset: 30px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(255,255,255,0.1);
+}
+
+.hero-circle::after { inset: 60px; }
+
+/* ---- MARQUEE ---- */
+.marquee-wrap {
+  background: var(--matcha-deep);
+  padding: 14px 0;
+  overflow: hidden;
+  display: flex;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 0;
+  animation: marquee 28s linear infinite;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 40px;
+  color: var(--matcha-pale);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.marquee-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ---- STORY SECTION ---- */
+.story {
+  padding: 120px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.story-img-wrap {
+  position: relative;
+}
+
+.story-img-frame {
+  width: 100%;
+  aspect-ratio: 4/5;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.story-img-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 0.8s ease;
+}
+
+.story-img-frame:hover img { scale: 1.04; }
+
+.story-img-accent {
+  position: absolute;
+  bottom: -24px;
+  right: -24px;
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 6px solid var(--cream);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+}
+
+.story-img-accent img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.story-tag-line {
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.story-tag span {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.story h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--matcha-deep);
+  margin-bottom: 24px;
+}
+
+.story h2 em { font-style: italic; color: var(--matcha); }
+
+.story p {
+  font-size: 0.9rem;
+  line-height: 1.9;
+  color: var(--fog);
+  margin-bottom: 16px;
+}
+
+.story-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 0.5px solid var(--cream-dark);
+}
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  font-weight: 300;
+  color: var(--matcha);
+  display: block;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fog);
+  margin-top: 6px;
+  display: block;
+}
+
+/* ---- MENU SECTION ---- */
+.menu {
+  padding: 100px 60px;
+  background: var(--matcha-mist);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 70px;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.section-label-line {
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.section-label span {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.section-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 3vw, 3rem);
+  font-weight: 300;
+  color: var(--matcha-deep);
+  line-height: 1.15;
+}
+
+.section-header h2 em { font-style: italic; color: var(--matcha); }
+
+.view-all {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--matcha);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-bottom: 8px;
+  transition: gap 0.3s;
+}
+
+.view-all:hover { gap: 14px; }
+
+/* CARD GRID */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 0.5px solid rgba(45,90,39,0.1);
+  transition: transform 0.45s cubic-bezier(0.4,0,0,1), box-shadow 0.45s;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.4s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 60px rgba(26,61,31,0.12);
+}
+
+.card-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 0.6s ease;
+}
+
+.card:hover .card-image img { scale: 1.08; }
+
+.card-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: var(--matcha-deep);
+  color: var(--matcha-pale);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.card-body {
+  padding: 24px 24px 28px;
+}
+
+.card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--matcha-deep);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.card-desc {
+  font-size: 0.78rem;
+  color: var(--fog);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--matcha);
+}
+
+.card-price sub {
+  font-size: 0.65rem;
+  vertical-align: middle;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--fog);
+  margin-right: 2px;
+}
+
+.buy-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--matcha-deep);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.buy-btn:hover { background: var(--matcha); transform: scale(1.1); }
+
+/* ---- FEATURES STRIP ---- */
+.features {
+  padding: 80px 60px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--cream-dark);
+  border-top: 0.5px solid var(--cream-dark);
+}
+
+.feature {
+  background: var(--cream);
+  padding: 50px 40px;
+  text-align: center;
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--matcha-mist);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 1.3rem;
+}
+
+.feature h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--matcha-deep);
+  margin-bottom: 10px;
+}
+
+.feature p {
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--fog);
+}
+
+/* ---- TESTIMONY ---- */
+.testimony {
+  padding: 120px 60px;
+  background: var(--matcha-deep);
+  color: #fff;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.testimony::before {
+  content: '"';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  translate: -50% 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30rem;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.testimony-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.testimony-label-line {
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.testimony-label span {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.testimony blockquote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 700px;
+  margin: 0 auto 30px;
+  color: #fff;
+}
+
+.testimony-author {
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--matcha-pale);
+}
+
+/* ---- CONTACT ---- */
+#contact {
+  padding: 100px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.contact-info h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 300;
+  color: var(--matcha-deep);
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.contact-info h2 em { font-style: italic; color: var(--matcha); }
+
+.contact-info p {
+  font-size: 0.88rem;
+  line-height: 1.9;
+  color: var(--fog);
+  margin-bottom: 40px;
+}
+
+.contact-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.85rem;
+  color: var(--fog);
+}
+
+.contact-item-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--matcha-mist);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.form-group input,
+.form-group textarea {
+  background: #fff;
+  border: 0.5px solid rgba(45,90,39,0.2);
+  border-radius: 4px;
+  padding: 13px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus { border-color: var(--matcha); }
+
+.form-group textarea { resize: vertical; min-height: 100px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ---- FOOTER ---- */
+footer {
+  background: var(--matcha-deep);
+  color: rgba(255,255,255,0.6);
+  padding: 50px 60px 30px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 40px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.1);
+  margin-bottom: 30px;
+}
+
+.footer-brand .logo {
+  color: #fff;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.footer-brand p {
+  font-size: 0.82rem;
+  line-height: 1.8;
+  max-width: 260px;
+}
+
+.footer-col h5 {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 20px;
+}
+
+.footer-col a {
+  display: block;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: var(--matcha-pale); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- CART TOAST ---- */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  translate: -50% 0;
+  background: var(--matcha-deep);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  z-index: 9998;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.4,0,0,1), opacity 0.4s;
+  pointer-events: none;
+}
+
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1024px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 140px 40px 80px; }
+  .story { grid-template-columns: 1fr; gap: 60px; }
+  .story-img-accent { display: none; }
+  .card-grid { grid-template-columns: 1fr 1fr; }
+  .features { grid-template-columns: 1fr 1fr; }
+  #contact { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  header { padding: 20px 30px; }
+  header.scrolled { padding: 14px 30px; }
+}
+
+@media (max-width: 640px) {
+  .card-grid { grid-template-columns: 1fr; }
+  .features { grid-template-columns: 1fr; }
+  .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .menu, .story, #contact { padding: 80px 24px; }
+  .footer-top { grid-template-columns: 1fr; }
+  footer { padding: 40px 24px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <a href="#" class="logo">Matcha<span> Oat</span></a>
+  <nav>
+    <a href="#">Beranda</a>
+    <a href="#menu">Menu</a>
+    <a href="#contact">Kontak</a>
+    <button class="toggle-btn" onclick="toggleDark()">Mode Gelap</button>
+    <a href="#menu" class="nav-cta">Pesan Sekarang</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span>Premium Since 2024</span>
+    </div>
+    <h1>Rasa Autentik<br><em>Matcha</em> Pilihan</h1>
+    <p class="hero-desc">Setiap tegukan adalah perjalanan menuju ketenangan. Dibuat dari daun matcha ceremonial grade pilihan, dipadukan dengan oat premium yang menyehatkan jiwa dan raga.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="scrollToMenu()">
+        Lihat Menu Kami
+        <span class="arrow">→</span>
+      </button>
+      <button class="btn-ghost" onclick="scrollToStory()">
+        Kisah Kami →
+      </button>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-circle"></div>
+    <img class="hero-img" src="https://i.pinimg.com/1200x/f3/41/34/f34134b0a55c258993f0bea09bed5846.jpg" alt="Matcha Premium">
+    <div class="hero-badge">
+      <span class="hero-badge-num">100%</span>
+      <span class="hero-badge-label">Ceremonial Grade Matcha</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-dot"></span>Matcha Ceremonial Grade</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Oat Premium</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Tanpa Pengawet</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Dibuat Segar Setiap Hari</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Bahan Pilihan</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Resep Eksklusif</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Matcha Ceremonial Grade</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Oat Premium</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Tanpa Pengawet</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Dibuat Segar Setiap Hari</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Bahan Pilihan</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Resep Eksklusif</span>
+  </div>
+</div>
+
+<!-- STORY -->
+<section class="story" id="story">
+  <div class="story-img-wrap">
+    <div class="story-img-frame">
+      <img src="https://i.pinimg.com/1200x/f3/41/34/f34134b0a55c258993f0bea09bed5846.jpg" alt="Our Story">
+    </div>
+    <div class="story-img-accent">
+      <img src="https://images.unsplash.com/photo-1567446537708-ac4aa75c9c28?w=400&q=80" alt="Matcha Detail">
+    </div>
+  </div>
+
+  <div class="story-text">
+    <div class="story-tag">
+      <div class="story-tag-line"></div>
+      <span>Kisah Kami</span>
+    </div>
+    <h2>Berawal dari<br><em>Kecintaan</em> pada Matcha</h2>
+    <p>Matcha Oat lahir dari kecintaan mendalam terhadap seni minum teh Jepang yang dipadukan dengan gaya hidup sehat modern. Kami percaya bahwa minuman yang baik tak harus rumit — cukup bahan terbaik, teknik yang tepat, dan hati yang tulus.</p>
+    <p>Setiap menu kami dikurasi dengan seksama, menggunakan matcha grade tertinggi yang kaya antioksidan, dipadukan dengan pilihan bahan pelengkap yang memperkuat karakter unik matcha tanpa menguburnya.</p>
+
+    <div class="story-stats">
+      <div>
+        <span class="stat-num">3+</span>
+        <span class="stat-label">Varian Menu Pilihan</span>
+      </div>
+      <div>
+        <span class="stat-num">500+</span>
+        <span class="stat-label">Pelanggan Setia</span>
+      </div>
+      <div>
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Bahan Alami</span>
+      </div>
+      <div>
+        <span class="stat-num">0</span>
+        <span class="stat-label">Pengawet & Pewarna</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU SECTION -->
+<section id="menu" class="menu">
+  <div class="section-header">
+    <div>
+      <div class="section-label">
+        <div class="section-label-line"></div>
+        <span>Menu Kami</span>
+      </div>
+      <h2>Menu <em>Favorit</em><br>Pilihan Hari Ini</h2>
+    </div>
+    <a href="#menu" class="view-all">Lihat Semua →</a>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-image">
+        <img src="pure.jpg" alt="Origin Oat Matcha" onerror="this.src='https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=600&q=80'">
+        <span class="card-badge">Terlaris</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-name">Pure Matcha</h3>
+        <p class="card-desc">Pure matcha dengan cita rasa alami yang lembut, menghadirkan kesegaran autentik di setiap tegukan.</p>
+        <div class="card-footer">
+          <div class="card-price"><sub>Rp</sub>15.000</div>
+          <button class="buy-btn" onclick="addToCart('Origin Oat Matcha')">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-image">
+        <img src="Mtcuy ori.jpg" alt="Origin Oat Matcha" onerror="this.src='https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=600&q=80'">
+        <span class="card-badge">Terlaris</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-name">Origin Oat Matcha</h3>
+        <p class="card-desc">Matcha dengan karakter rasa autentik yang halus dan seimbang.
+Dihadirkan secara murni untuk menghadirkan pengalaman minum matcha yang elegan dan berkelas.</p>
+        <div class="card-footer">
+          <div class="card-price"><sub>Rp</sub>35.000</div>
+          <button class="buy-btn" onclick="addToCart('Origin Oat Matcha')">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-image">
+        <img src="Matcha Choco.jpg" alt="Choco Matcha">
+        <span class="card-badge">Populer</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-name">Choco Matcha </h3>
+        <p class="card-desc">Perpaduan berani antara intensitas cokelat hitam (dark chocolate) premium dengan kesegaran matcha. Menciptakan gradasi rasa yang kaya dan tekstur yang bold.</p>
+        <div class="card-footer">
+          <div class="card-price"><sub>Rp</sub>40.000</div>
+          <button class="buy-btn" onclick="addToCart('Choco Matcha')">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-image">
+        <img src="Stwbry.jpg" alt="Ichigo Matcha">
+        <span class="card-badge">Premium</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-name">Ichigo Matcha</h3>
+        <p class="card-desc">Matcha berkualitas tinggi dipadukan dengan stroberi matang sempurna, menciptakan keseimbangan rasa yang halus, segar, dan berkelas—dirancang untuk momen istimewa Anda..</p>
+        <div class="card-footer">
+          <div class="card-price"><sub>Rp</sub>45.000</div>
+          <button class="buy-btn" onclick="addToCart('Ichigo Matcha')">+</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="feature">
+    <div class="feature-icon">🍃</div>
+    <h4>Grade Ceremonial</h4>
+    <p>Matcha kualitas terbaik, dipilih dari kebun terpercaya Uji, Kyoto.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🥛</div>
+    <h4>Oat Premium</h4>
+    <p>Oat pilihan yang memperkaya tekstur dan nilai gizi setiap tegukan.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">✨</div>
+    <h4>Tanpa Pengawet</h4>
+    <p>Dibuat segar setiap hari, tanpa bahan pengawet atau pewarna buatan.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🚀</div>
+    <h4>Pesan Cepat</h4>
+    <p>Antar ke lokasi Anda dalam hitungan menit. Segar terjamin sampai tangan.</p>
+  </div>
+</div>
+
+<!-- TESTIMONY -->
+<section class="testimony">
+  <div class="testimony-label">
+    <div class="testimony-label-line"></div>
+    <span>Kata Pelanggan</span>
+    <div class="testimony-label-line"></div>
+  </div>
+  <blockquote>"Matcha Oat benar-benar mengubah cara saya memulai pagi. Rasanya autentik, bahan-bahannya terasa jujur — ini bukan sekadar minuman, ini ritual."</blockquote>
+  <p class="testimony-author">— Elvaa., Pelanggan Setia</p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info">
+    <div class="story-tag">
+      <div class="story-tag-line"></div>
+      <span>Hubungi Kami</span>
+    </div>
+    <h2>Siap Melayani<br><em>Pesanan</em> Anda</h2>
+    <p>Ada pertanyaan, pesanan khusus, atau kolaborasi? Kami dengan senang hati mendengar Anda. Tim kami siap membantu setiap hari.</p>
+
+    <div class="contact-detail">
+      <div class="contact-item">
+        <span class="contact-item-icon">📞</span>
+        0812-3456-7890
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-icon">📧</span>
+        hello@matchaoat.id
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-icon">📍</span>
+        Salatiga, Indonesia
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nama</label>
+          <input type="text" placeholder="Nama Anda">
+        </div>
+        <div class="form-group">
+          <label>Nomor HP</label>
+          <input type="tel" placeholder="08xx-xxxx-xxxx">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Pesanan / Pesan</label>
+        <textarea placeholder="Tulis pesanan atau pertanyaan Anda di sini…"></textarea>
+      </div>
+      <button class="btn-primary" style="align-self: flex-start;" onclick="submitForm()">
+        Kirim Pesan
+        <span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo">Matcha<span style="color: var(--matcha-pale)"> Oat</span></a>
+      <p>Minuman matcha premium yang menyehatkan jiwa dan raga. Dibuat dengan cinta dan bahan terpilih.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Navigasi</h5>
+      <a href="#">Beranda</a>
+      <a href="#menu">Menu</a>
+      <a href="#story">Kisah Kami</a>
+      <a href="#contact">Kontak</a>
+    </div>
+    <div class="footer-col">
+      <h5>Ikuti Kami</h5>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Matcha Oat. Semua hak dilindungi.</span>
+    <span>Dibuat dengan Cinta</span>
+  </div>
+</footer>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ---- DARK MODE ---- */
+  function toggleDark() {
+    document.body.classList.toggle('dark');
+    const btn = document.querySelector('.toggle-btn');
+    btn.textContent = document.body.classList.contains('dark') ? 'Mode Terang' : 'Mode Gelap';
+  }
+
+  /* ---- STICKY NAV ---- */
+  window.addEventListener('scroll', () => {
+    document.getElementById('header').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ---- SCROLL REVEAL ---- */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 120);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.card').forEach(el => observer.observe(el));
+
+  /* ---- CART TOAST ---- */
+  function addToCart(item) {
+    showToast('✓ ' + item + ' ditambahkan ke pesanan');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  /* ---- SCROLL NAV ---- */
+  function scrollToMenu() {
+    document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function scrollToStory() {
+    document.getElementById('story').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  /* ---- FORM SUBMIT ---- */
+  function submitForm() {
+    showToast('✓ Pesan terkirim! Kami akan segera menghubungi Anda');
+  }
+</script>
+
+</body>
+</html>
